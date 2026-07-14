@@ -11,13 +11,14 @@ L = 1.0    # Barrier width
 E = np.linspace(0.01, 4.0, 500)
 
 # ---- Wave number inside barrier (complex-safe formula) ----
-k2 = np.sqrt(2 * m * np.abs(V0 - E) + 0j) / hbar
+k2 = np.sqrt(2 * m * (V0 - E) + 0j) / hbar
 
 # ---- Transmission coefficient calculation ----
 numerator = 4 * E * (V0 - E)
 denominator = numerator + V0**2 * np.sinh(k2 * L)**2
 T = numerator / denominator
 T = np.real(T)
+T = np.clip(T, 0, 1)
 
 # ---- Plotting ----
 plt.figure(figsize=(8,5))
@@ -27,6 +28,7 @@ plt.xlabel('Particle Energy (E)')
 plt.ylabel('Transmission Coefficient (T)')
 plt.title('Quantum Tunneling: Transmission Coefficient vs Energy')
 plt.legend()
+plt.ylim(-0.05, 1.05)
 plt.grid(True, alpha=0.3)
 plt.savefig('transmission_coefficient.png', dpi=300)
 plt.show()
